@@ -2,10 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard - {{.Username}}</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Hello</h1>
+<div class="container">
+    <h1>Welcome, {{.Username}} 👋</h1>
+
+    <form method="POST" action="/add-task" class="task-input">
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="text" name="description" placeholder="Description">
+        <input type="date" name="due_date" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <ul class="task-list">
+        {{range .Tasks}}
+        <li>
+            <div>
+                <strong>{{.Title}}</strong><br>
+                <small>{{.Description}}</small><br>
+                <small>Due: {{.DueDate}}</small>
+            </div>
+            <div>
+                <form method="GET" action="/delete-task" style="display:inline;">
+                    <input type="hidden" name="id" value="{{.ID}}">
+                    <button type="submit">❌</button>
+                </form>
+
+                <!-- Edit form can be expanded with a modal -->
+                <form method="POST" action="/edit-task" style="display:inline;">
+                    <input type="hidden" name="id" value="{{.ID}}">
+                    <input type="text" name="title" value="{{.Title}}" required>
+                    <input type="text" name="description" value="{{.Description}}">
+                    <input type="date" name="due_date" value="{{.DueDate}}" required>
+                    <button type="submit">✏️</button>
+                </form>
+            </div>
+        </li>
+        {{end}}
+    </ul>
+</div>
 </body>
 </html>
+
